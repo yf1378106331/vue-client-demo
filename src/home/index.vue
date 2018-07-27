@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div v-for="(ads, ads_key) in advertisings" :key="ads_key">
-      <img  v-for="(ad, ad_key) in ads" :key="ad_key" :src="ad.url" :class="ad.size===1?'hot-company__single-size':'hot-company__double-size'">
+    <div  v-for="(ads, ads_key) in advertisings" :key="ads_key" class="hot-company__row-container">
+      <div  v-for="(ad, ad_key) in ads" :key="ad_key" class="hot-company__column-container">
+          <img :src="ad.url"
+        :class="ad.size===1?'hot-company__single-size':'hot-company__double-size'">
+        <div class="mask" v-if="ad.maskShow"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {sg,db} from "./data.json"
+import {sg,db,bw} from "./data.json"
 export default {
   data () {
     return {
@@ -15,128 +19,192 @@ export default {
       singleAds: [],
       doubleAds: [],
       advertisings: [],
-      hotEnterprises: [
+      hotComponies: [
         {
           size: 2,
           url: db,
-        }, {
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
+        },{
           size: 2,
           url: db,
-        }, {
-          size: 1,
-          url: sg,
-        }, {
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
+        },{
           size: 2,
           url: db,
-        }, {
-          size: 1,
-          url: sg,
-        }, {
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
+        },{
           size: 2,
           url: db,
-        }, {
-          size: 1,
-          url: sg,
-        }, {
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
+        },{
           size: 2,
           url: db,
-        }, {
-          size: 1,
-          url: sg,
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
+        },{
+          size: 2,
+          url: db,
+          description:'时代峰峻拉法基多少啦暗室逢灯静安寺的房间卡士大夫阿萨德飞机阿斯蒂芬金坷垃第三方阿斯蒂芬'
         },
+         {
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        },{
+          size: 1,
+          url: sg,
+        }
       ],
       coverAds: [
         {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         }, {
           size: 1,
-          url: sg,
+          url: bw,
         },
       ],
     }
   },
   methods: {
-    analsys () { // 单双尺寸数组
+    analysis () { // 单双尺寸数组
       this.singleAds = []
       this.doubleAds = []
-      this.hotEnterprises.forEach((hot, i) => {
-        if (hot.size % 2 === 0) {
-          this.doubleAds.push(hot)
+      this.hotComponies.forEach((company, i) => {
+        company.maskShow = false
+        if (company.size % 2 === 0) {
+          this.doubleAds.push(company)
         } else {
-          this.singleAds.push(hot)
+          this.singleAds.push(company)
         }
       })
     },
     concatFunc (base, data) {
       return base.concat(data)
     },
-    totalSize () { // 后端返回总尺寸
-      this.adTotalSizes = 0
-      this.hotEnterprises.forEach((hot, i) => {
-        this.adTotalSizes += hot.size
+    totalSize () { // 后端返回广告图总尺寸
+      let totalSizeOfAds = 0
+      this.hotComponies.forEach((company, i) => {
+        totalSizeOfAds += company.size
       })
       // 初始化总广告
-      if (this.adTotalSizes < 12) {
-        const hotEp = this.coverAds.slice(0, 12 - this.adTotalSizes)
-        this.hotEnterprises = this.concatFunc(this.hotEnterprises, hotEp)
-        this.adTotalSizes += 12 - this.adTotalSizes
-      } else if (this.adTotalSizes % 6 !== 0) {
-        const hotCover = this.coverAds.slice(0, 6 - (this.adTotalSizes % 6))
-        this.hotEnterprises = this.concatFunc(this.hotEnterprises, hotCover)
-        this.adTotalSizes += 6 - (this.adTotalSizes % 6)
+      if (totalSizeOfAds < 12) {
+        const hotEp = this.coverAds.slice(0, 12 - totalSizeOfAds)
+        this.hotComponies = this.concatFunc(this.hotComponies, hotEp)
+      } else if (totalSizeOfAds % 6 !== 0) {
+        const hotCover = this.coverAds.slice(0, 6 - (totalSizeOfAds % 6))
+        this.hotComponies = this.concatFunc(this.hotComponies, hotCover)
       }
     },
     randomNum () { // 返回随机数
       const array = [0, 1, 2, 3]
       return parseInt(array[Math.round(Math.random() * (array.length - 1))])
     },
-    randomCombine (totalSizes, slSize, dlSize) { // 组合展示数据
-      const sl = [...slSize]
-      const dl = [...dlSize]
-      const size = totalSizes / 6
+    randomCombine (listOne, listTwo) { // 组合展示数据
+      let copyOfListOne = [...listOne]
+      let copyOfListTwo = [...listTwo]
+      const rowsLength = Math.floor((listOne.length + 2*listTwo.length) / 6)
       const result = []
-      for (let t = 0; t < size; t++) {
-        let rd = this.randomNum()
-        if (rd > dl.length || dl.length === 0) { // 出现双尺寸不足以补全
-          rd = dl.length
+      for (let row = 0; row < rowsLength; row++) {
+        let random = this.randomNum()
+        if (random > copyOfListTwo.length || copyOfListTwo.length === 0) { // 出现双尺寸不足以补全
+          random = copyOfListTwo.length
         }
 
-        const lastSl = sl.length
-        let arr = dl.splice(0, rd)
-          .concat(sl.splice(0, (6 - 2 * rd)))
-        let total = 0
-        arr.forEach(ar => total += ar.size)
-        if (total < 6 && lastSl < 6 - 2 * rd) { // 出现单倍不足以补全
-          arr = arr.concat(dl.splice(0, (6 - total) / 2))
+        const remainLengthOfcopyListOne = copyOfListOne.length
+        const remaincopyOfListOne = [...copyOfListOne]
+        const remaincopyOfListTwo = [...copyOfListTwo]
+        let currentRowArr = copyOfListTwo.splice(0, random)
+          .concat(copyOfListOne.splice(0, (6 - 2 * random)))
+        let columnsOfRow = 0
+        currentRowArr.forEach((el) => { columnsOfRow += el.size })
+        if (columnsOfRow < 6 && remainLengthOfcopyListOne < 6 - 2 * random) { // 出现单倍不足以补全
+          currentRowArr = currentRowArr.concat(copyOfListTwo.splice(0, (6 - columnsOfRow) / 2))
         }
-        result.push(arr)
+
+        columnsOfRow = 0
+        currentRowArr.forEach((el) => { columnsOfRow += el.size })
+        if (columnsOfRow !==6 && row>=0) { 
+          row--; 
+          copyOfListOne= [...remaincopyOfListOne]
+          copyOfListTwo = [...remaincopyOfListTwo]
+          continue 
+        }
+        result.push(currentRowArr)
       }
-      return result
+      return { result, lastRow: copyOfListOne.concat(copyOfListTwo) }
+    },
+    concatLastRow ({ result, lastRow }) {
+      this.advertisings = result
+      if(lastRow.length!==0) {
+        let totalSizeOfLastRow = 0
+        lastRow.forEach((last, i) => {
+          totalSizeOfLastRow += last.size
+        })
+
+        lastRow = lastRow.concat(this.coverAds.slice(0, 6 - totalSizeOfLastRow))
+        this.advertisings.push(lastRow)
+      }
+
+      let lengthOfAdvertisings = this.advertisings.length
+      for(var i=0; i<2-lengthOfAdvertisings; i++){
+        this.advertisings.push(this.coverAds.slice(0, 6))
+      }
     },
     sortAds (result) {
       result.forEach((ads, t) => {
@@ -144,9 +212,10 @@ export default {
       })
     },
     adsRender () {
-      this.totalSize()
-      this.analsys()
-      this.advertisings = this.randomCombine(this.adTotalSizes, this.singleAds, this.doubleAds)
+      // this.totalSize()
+      this.analysis()
+      const { result, lastRow } = this.randomCombine(this.singleAds, this.doubleAds)
+      this.concatLastRow({ result, lastRow })
       this.sortAds(this.advertisings)
     },
     setInterValFunc () {
@@ -160,8 +229,20 @@ export default {
 }
 </script>
 
+
 <style lang="scss">
 .hot-company{
+  &__column-container{
+    display: inline-block;
+    position: relative;
+  }
+  &__row-container{
+    img{
+      &:hover{
+        cursor: pointer;
+      }
+    }
+  }
   &__single-size{
     width: 200px;
     height: 200px;
@@ -170,5 +251,13 @@ export default {
     width: 400px;
     height: 200px;
   }
+}
+.mask{
+  position: absolute;
+  z-index: 10;
+  top: -1;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
 }
 </style>
